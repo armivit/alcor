@@ -5,9 +5,11 @@ declare(strict_types=1);
 
 require __DIR__ . '/src/autoload.php';
 
+use App\RequestMethod;
+
 $router = new App\Router();
 
-$router->addRoute('GET', 'hello/world', function () {
+$router->addRoute(RequestMethod::ANY, 'hello/world', function () {
     echo "Hello World!\n";
 });
 
