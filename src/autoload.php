@@ -2,21 +2,12 @@
 
 declare(strict_types=1);
 
-/**
- * @see https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader-examples.md
- */
-spl_autoload_register(function ($className) {
-    $prefix = 'App\\';
-    $length = strlen($prefix);
+spl_autoload_register(function (string $className) {
+    if (strpos($className, 'App\\') === 0) {
+        $file = __DIR__ . '/' . str_replace('\\', '/', substr($className, 4)) . '.php';
 
-    if (strncmp($prefix, $className, $length) !== 0) {
-        return;
-    }
-
-    $relativeClass = substr($className, $length);
-    $file = __DIR__ . '/' . str_replace('\\', '/', $relativeClass) . '.php';
-
-    if (file_exists($file)) {
-        require $file;
+        if (file_exists($file)) {
+            require $file;
+        }
     }
 });
