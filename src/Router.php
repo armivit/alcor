@@ -6,27 +6,49 @@ namespace App;
 
 class Router
 {
-    protected array $routes = [];
+    private string $delimiter;
+    private RouteNode $rootNode;
 
-    public function addRoute(int $requestMethod, string $route, callable $resolver)
+    public function __construct(string $delimiter)
     {
-        if (!isset($this->routes[$route])) {
-            $this->routes[$route] = [];
-        }
-
-        $this->routes[$route][$requestMethod] = $resolver;
+        $this->delimiter = $delimiter;
+        $this->rootNode = new RouteNode();
     }
 
-    public function resolve(string $method, string $uri): ?callable
+    public function addRoute(int $requestMethod, array $path, callable $callable)
     {
-        $requestMethod = constant(RequestMethod::class . '::' . $method);
+        $node = $this->rootNode;
 
-        if (isset($this->routes[$uri])) {
-            foreach ($this->routes[$uri] as $bitmask => $resolver) {
-                if ($requestMethod & $bitmask) {
-                    return $resolver;
-                }
+        foreach ($path as $expr) {
+            if (!$node->hasChild($expr)) {
+                $node->addChild($expr);
             }
+
+            $node = $node->getChild($expr);
+        }
+
+        $node->addCallable($requestMethod, $callable);
+    }
+
+    public function resolve(string $method, string $uri): ?RouteHandler
+    {
+        $node = $this->rootNode;
+        $params = [];
+
+        foreach (explode($this->delimiter, $uri) as $slug) {
+            $node = $node->findChild($slug);
+
+            if ($node === null) {
+                return null;
+            } elseif ($node->isDynamic) {
+                $params[$node->name] = $slug;
+            }
+        }
+
+        $callable = $node->getCallable(RequestMethod::extract($method));
+
+        if ($callable) {
+            return new RouteHandler($callable, $params);
         }
 
         return null;

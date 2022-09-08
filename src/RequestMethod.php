@@ -16,4 +16,9 @@ class RequestMethod
     const TRACE = 128;
     const PATCH = 256;
     const ANY = 511;
+
+    public static function extract(string $const): int
+    {
+        return constant(static::class . '::' . $const);
+    }
 }
