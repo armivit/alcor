@@ -50,7 +50,7 @@ class RouteNode
     public function getCallable(int $requestMethod): ?callable
     {
         foreach ($this->callable as $bitmask => $callable) {
-            if ($requestMethod & $bitmask) {
+            if ($requestMethod && ($bitmask & $requestMethod) === $requestMethod) {
                 return $callable;
             }
         }

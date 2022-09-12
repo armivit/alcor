@@ -17,8 +17,23 @@ class RequestMethod
     const PATCH = 256;
     const ANY = 511;
 
-    public static function extract(string $const): int
+    public static function any(): int
     {
-        return constant(static::class . '::' . $const);
+        return static::GET
+            | static::HEAD
+            | static::POST
+            | static::PUT
+            | static::DELETE
+            | static::CONNECT
+            | static::OPTIONS
+            | static::TRACE
+            | static::PATCH;
+    }
+
+    public static function extract(string $methodName): ?int
+    {
+        $constName = static::class . '::' . $methodName;
+
+        return defined($constName) ? constant($constName) : null;
     }
 }

@@ -9,7 +9,7 @@ use App\RequestMethod;
 
 $router = new App\Router('_');
 
-$router->addRoute(RequestMethod::ANY, ['hello', ':name'], function (string $name) {
+$router->addRoute(RequestMethod::any(), ['hello', ':name'], function (string $name) {
     echo "Hello {$name}!\n";
 });
 
