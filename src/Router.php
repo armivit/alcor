@@ -6,12 +6,10 @@ namespace App;
 
 class Router
 {
-    private string $delimiter;
     private RouteNode $rootNode;
 
-    public function __construct(string $delimiter)
+    public function __construct()
     {
-        $this->delimiter = $delimiter;
         $this->rootNode = new RouteNode();
     }
 
@@ -30,12 +28,12 @@ class Router
         $node->addCallable($requestMethod, $callable);
     }
 
-    public function resolve(string $method, string $uri): ?RouteHandler
+    public function resolve(Request $request): ?RouteHandler
     {
         $node = $this->rootNode;
         $params = [];
 
-        foreach (explode($this->delimiter, $uri) as $slug) {
+        foreach ($request->getPath() as $slug) {
             $node = $node->findChild($slug);
 
             if ($node === null) {
@@ -45,7 +43,7 @@ class Router
             }
         }
 
-        $callable = $node->getCallable(RequestMethod::extract($method));
+        $callable = $node->getCallable($request->getMethod());
 
         if ($callable) {
             return new RouteHandler($callable, $params);

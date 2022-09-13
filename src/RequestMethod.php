@@ -15,7 +15,6 @@ class RequestMethod
     const OPTIONS = 64;
     const TRACE = 128;
     const PATCH = 256;
-    const ANY = 511;
 
     public static function any(): int
     {
@@ -27,12 +26,18 @@ class RequestMethod
             | static::CONNECT
             | static::OPTIONS
             | static::TRACE
-            | static::PATCH;
+            | static::PATCH
+            | static::console();
+    }
+
+    public static function console(): int
+    {
+        return 512;
     }
 
     public static function extract(string $methodName): ?int
     {
-        $constName = static::class . '::' . $methodName;
+        $constName = self::class . '::' . $methodName;
 
         return defined($constName) ? constant($constName) : null;
     }
