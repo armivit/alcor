@@ -13,7 +13,6 @@ class ConsoleRequest extends Request
     {
         $this->method = static::extractMethod($argv);
         $this->path = static::extractPath($argv);
-        var_dump($this);
     }
 
     protected function extractMethod(array $argv): int
