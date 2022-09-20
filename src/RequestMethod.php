@@ -30,6 +30,19 @@ class RequestMethod
             | static::console();
     }
 
+    public static function web(): int
+    {
+        return static::GET
+            | static::HEAD
+            | static::POST
+            | static::PUT
+            | static::DELETE
+            | static::CONNECT
+            | static::OPTIONS
+            | static::TRACE
+            | static::PATCH;
+    }
+
     public static function console(): int
     {
         return 512;
