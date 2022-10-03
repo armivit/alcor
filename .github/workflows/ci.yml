@@ -8,9 +8,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+  
     - uses: php-actions/composer@v5
-    - uses: php-actions/phpunit@v3
 
-    with:
-      bootstrap: src/autoload.php
-      configuration: phpunit.xml
+    - uses: php-actions/phpunit@v3
+      with:
+        bootstrap: src/autoload.php
+        configuration: phpunit.xml
