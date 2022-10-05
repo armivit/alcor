@@ -21,6 +21,8 @@ class WebRequest extends Request
             $uri = substr($uri, strlen(static::PATH_PREFIX));
         }
 
-        $this->path = explode(static::PATH_DELIMITER, rtrim($uri, static::PATH_DELIMITER));
+        $uri = rtrim($uri, static::PATH_DELIMITER);
+
+        $this->path = $uri ? explode(static::PATH_DELIMITER, $uri) : [];
     }
 }

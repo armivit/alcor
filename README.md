@@ -1,6 +1,6 @@
 # Pure backend
 
-No [Composer](https://getcomposer.org/), no dependencies, pure code.
+No dependencies, pure code.
 
 ## Console app
 
